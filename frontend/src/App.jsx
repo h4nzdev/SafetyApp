@@ -1,5 +1,4 @@
 import React from "react";
-import MainPage from "./pages/MainPage";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import LoginForm from "./pages/LoginForm";
 import RegisterForm from "./pages/RegisterForm";
@@ -7,6 +6,7 @@ import IncidentReportForm from "./pages/IncidentReportForm";
 import EmergencyContacts from "./pages/EmergencyContacts";
 import IncidentMap from "./pages/IncidentMap";
 import MainLayout from "./layouts/MainLayout";
+import HomePage from "./pages/HomePage";
 
 const App = () => {
   return (
@@ -18,7 +18,7 @@ const App = () => {
         {/* Protected routes with sidebar layout */}
         <Route path="/homepage" element={
           <MainLayout>
-            <MainPage />
+            <HomePage />
           </MainLayout>
         } />
         <Route path="/report-incident" element={

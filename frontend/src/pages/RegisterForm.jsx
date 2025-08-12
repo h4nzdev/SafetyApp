@@ -2,7 +2,7 @@ import { Eye, EyeOff, Lock, Mail, Phone, User, UserPlus } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-function RegisterForm({ onRegister, onSwitchToLogin }) {
+function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -20,7 +20,9 @@ function RegisterForm({ onRegister, onSwitchToLogin }) {
             <UserPlus className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-slate-800">Create Account</h1>
-          <p className="text-slate-600 mt-3 text-lg">Join our emergency network</p>
+          <p className="text-slate-600 mt-3 text-lg">
+            Join our emergency network
+          </p>
         </div>
 
         <form className="space-y-5">
@@ -123,7 +125,10 @@ function RegisterForm({ onRegister, onSwitchToLogin }) {
         <div className="mt-8 text-center">
           <p className="text-slate-600">
             Already have an account?{" "}
-            <Link to="/" className="text-red-600 hover:text-red-700 font-semibold underline decoration-2 underline-offset-2">
+            <Link
+              to="/"
+              className="text-red-600 hover:text-red-700 font-semibold underline decoration-2 underline-offset-2"
+            >
               Sign in
             </Link>
           </p>

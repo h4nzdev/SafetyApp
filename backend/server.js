@@ -1,93 +1,93 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 
 const app = express();
-const port = 3000;
-const db_url = "mongodb://localhost:27017/myapp";
-
 app.use(express.json());
+app.use(cors());
 
-mongoose
-  .connect(db_url)
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`Server is connect in port: ${port}`);
-    });
-    console.log("Connected to the database");
-  })
-  .catch((error) => {
-    console.error("Error: ", error);
+const mongo_url = "mongodb://localhost:27017/community_reporting";
+const port = 3000;
+
+mongoose.connect(mongo_url).then(() => {
+  app.listen(port, () => {
+    console.log(`Server is running on port :`, port);
   });
+
+  console.log("Connected to the database!");
+});
 
 const UserSchema = new mongoose.Schema({
   name: String,
   email: String,
+  phone: String,
   password: String,
-  address: String,
 });
 
 const User = mongoose.model("users", UserSchema);
 
-//Get all the users from the database
 app.get("/users", async (req, res) => {
   try {
     const users = await User.find();
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users lists found!" });
+    }
+
     res.status(200).json(users);
   } catch (error) {
-    console.error("Error: ", error);
+    console.error("Error :", error);
+    return res.status(500).send("There is something error in users lists!");
   }
 });
 
-//Add users to the database
-app.post("/add-users", async (req, res) => {
+app.post("/register", async (req, res) => {
   try {
-    const existedEmail = await User.findOne({ email: req.body.email });
+    const user = req.body;
+    const existedEmail = await User.findOne({ email: user.email });
 
     if (existedEmail) {
       return res.status(400).json({ message: "Email is already existed!" });
     }
 
-    const newUser = new User(req.body);
-    await newUser.save();
+    if (!user) {
+      return res.status(404).json({ message: "Please fill up the form!" });
+    }
+
+    const newUsers = new User(user);
+    await newUsers.save();
     res
-      .status(200)
-      .json({ message: `User ${newUser.name} added successfully!` });
+      .status(201)
+      .json({ message: "User registered successfully!", newUsers });
   } catch (error) {
-    console.error("Error: ", error);
+    console.error("Error :", error);
+    return res
+      .status(500)
+      .send("There is something wrong on registering the user!");
   }
 });
 
-//Update user in the database
-app.put("/update-user/:id", async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(404).json({ message: "User not found!" });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
+
+    if (user) {
+      if (user.password === password) {
+        res.status(200).json({ success: true, user });
+      } else {
+        return res
+          .status(404)
+          .json({ success: false, message: "Password is incorrect!" });
+      }
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: "Email cannot be found!" });
     }
-
-    const updateUser = await User.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-
-    res.status(200).json({ message: "User updated successfully", updateUser });
   } catch (error) {
-    console.error("Error: ", error);
-  }
-});
-
-//Delete user to the database
-app.delete("/delete-user/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    if (!id) {
-      return res.status(404).json({ message: "User cannot be found!" });
-    }
-
-    const deletedUser = await User.findByIdAndDelete(id);
-    res
-      .status(200)
-      .json({ message: `User ${deletedUser.name} has deleted successfully` });
-  } catch (error) {
-    console.error("Error: ", error);
+    console.error("Error :", error);
+    return res
+      .status(500)
+      .send("There is something wrong on logging in the user!");
   }
 });

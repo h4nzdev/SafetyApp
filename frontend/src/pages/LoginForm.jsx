@@ -1,20 +1,32 @@
 import { AlertTriangle, Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    const { email, password } = formData;
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:3000/login", formData);
 
-    if (email.trim() === "" && password.trim() === "") {
-      return alert("Please fill the form");
+      // if (!res.data.success) {
+      //   alert(res.data.message);
+      //   return;
+      // }
+
+      if (res.data.success) {
+        sessionStorage.setItem("user", JSON.stringify(res.data.user));
+        navigate("/homepage");
+      } else {
+        alert(res.data.message);
+      }
+    } catch (error) {
+      console.error("Error :", error);
     }
-
-    navigate("/homepage")
   };
 
   return (
@@ -90,7 +102,10 @@ function LoginForm() {
         <div className="mt-8 text-center">
           <p className="text-slate-600">
             Don't have an account?{" "}
-            <Link to="/register" className="text-red-600 hover:text-red-700 font-semibold underline decoration-2 underline-offset-2">
+            <Link
+              to="/register"
+              className="text-red-600 hover:text-red-700 font-semibold underline decoration-2 underline-offset-2"
+            >
               Sign up
             </Link>
           </p>

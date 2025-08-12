@@ -1,8 +1,20 @@
 import { Bell, User, Search } from "lucide-react";
+import { useEffect } from "react";
+import { useState } from "react";
 
 function Header() {
+  const [user, setUser] = useState(null);
+
+  const fetchUser = () => {
+    setUser(JSON.parse(sessionStorage.getItem("user")));
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+  console.log(user);
   return (
-    <header className="bg-white border-b border-slate-200 px-6 py-4 shadow-sm">
+    <header className="bg-white border-b border-slate-200 p-6 py-4 shadow-sm">
       <div className="flex items-center justify-between">
         {/* Search bar */}
         <div className="flex-1 max-w-md">
@@ -31,7 +43,9 @@ function Header() {
             <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-white" />
             </div>
-            <span className="hidden md:block font-medium">Hanz Christian Angelo</span>
+            <span className="hidden md:block font-medium">
+              {user?.name}
+            </span>
           </button>
         </div>
       </div>
