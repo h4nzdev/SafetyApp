@@ -1,25 +1,24 @@
 import { AlertTriangle, Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { UserContext } from "../context/UserContext"; // Import UserContext
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext); // Get setUser function from context
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:3000/login", formData);
-
-      // if (!res.data.success) {
-      //   alert(res.data.message);
-      //   return;
-      // }
-
       if (res.data.success) {
-        sessionStorage.setItem("user", JSON.stringify(res.data.user));
+        // Save user data in both sessionStorage and context
+        const userData = res.data.user;
+        sessionStorage.setItem("user", JSON.stringify(userData));
+        setUser(userData); // Update the user context
         navigate("/homepage");
       } else {
         alert(res.data.message);

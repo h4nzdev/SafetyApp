@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import LoginForm from "./pages/LoginForm";
 import RegisterForm from "./pages/RegisterForm";
 import IncidentReportForm from "./pages/IncidentReportForm";
@@ -7,37 +7,56 @@ import EmergencyContacts from "./pages/EmergencyContacts";
 import IncidentMap from "./pages/IncidentMap";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginForm />} />
-        <Route path="/register" element={<RegisterForm />} />
-        
-        {/* Protected routes with sidebar layout */}
-        <Route path="/homepage" element={
-          <MainLayout>
-            <HomePage />
-          </MainLayout>
-        } />
-        <Route path="/report-incident" element={
-          <MainLayout>
-            <IncidentReportForm />
-          </MainLayout>
-        } />
-        <Route path="/emergency-contact" element={
-          <MainLayout>
-            <EmergencyContacts />
-          </MainLayout>
-        } />
-        <Route path="/map-incedent" element={
-          <MainLayout>
-            <IncidentMap />
-          </MainLayout>
-        } />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<LoginForm />} />
+      <Route path="/register" element={<RegisterForm />} />
+
+      {/* Protected routes with sidebar layout */}
+      <Route
+        path="/homepage"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <HomePage />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/report-incident"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <IncidentReportForm />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/emergency-contact"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <EmergencyContacts />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/map-incedent"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <IncidentMap />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 };
 

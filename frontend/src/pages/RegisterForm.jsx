@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Eye, EyeOff, Lock, Mail, Phone, User, UserPlus } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -12,6 +13,32 @@ function RegisterForm() {
     confirmPassword: "",
   });
 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:3000/register", formData);
+
+      if (!formData) {
+        return alert("Please fill out the form");
+      }
+
+      if (res.data.success) {
+        alert(res.data.message);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          password: "",
+          confirmPassword: "",
+        });
+      } else {
+        return alert(res.data.message);
+      }
+    } catch (error) {
+      console.error("Error :", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50 to-slate-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 border border-slate-200">
@@ -25,7 +52,7 @@ function RegisterForm() {
           </p>
         </div>
 
-        <form className="space-y-5">
+        <form onSubmit={handleRegister} className="space-y-5">
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-3">
               Full Name

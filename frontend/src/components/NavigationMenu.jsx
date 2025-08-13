@@ -34,8 +34,13 @@ function NavigationMenu() {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("user");
-    navigate("/");
+    const confirmed = confirm("Are you sure you want to logout?");
+    if (confirmed) {
+      sessionStorage.removeItem("user");
+      navigate("/");
+    } else {
+      return;
+    }
   };
 
   return (
