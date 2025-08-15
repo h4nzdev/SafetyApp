@@ -8,6 +8,9 @@ import IncidentMap from "./pages/IncidentMap";
 import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UserAccount from "./pages/UserAccount";
+import Settings from "./pages/Settings";
+import SettingsPages from "./pages/Settings";
 
 const App = () => {
   return (
@@ -52,6 +55,26 @@ const App = () => {
           <ProtectedRoute>
             <MainLayout>
               <IncidentMap />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user-account"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <UserAccount />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <SettingsPages />
             </MainLayout>
           </ProtectedRoute>
         }
