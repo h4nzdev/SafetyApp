@@ -33,7 +33,7 @@ export const ReportProvider = ({ children }) => {
 
   // Return the provider wrapping the children
   return (
-    <ReportContext.Provider value={{ reports, setReports }}>
+    <ReportContext.Provider value={{ reports, setReports, fetchReports }}>
       {children}
     </ReportContext.Provider>
   );

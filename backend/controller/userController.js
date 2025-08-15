@@ -35,13 +35,11 @@ export const registerUser = async (req, res) => {
 
     const newUsers = new User(user);
     await newUsers.save();
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "User registered successfully!",
-        newUsers,
-      });
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully!",
+      newUsers,
+    });
   } catch (error) {
     console.error("Error :", error);
     res.status(500).send("There is something wrong on registering the user!");
@@ -70,5 +68,29 @@ export const loginUser = async (req, res) => {
   } catch (error) {
     console.error("Error :", error);
     res.status(500).send("There is something wrong on logging in the user!");
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateDetails = req.body;
+
+    if (!id) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Cannot find the user" });
+    }
+
+    const updateUser = await User.findByIdAndUpdate(id, updateDetails, {
+      new: true,
+    });
+
+    res
+      .status(200)
+      .json({ success: true, message: "User updated successfully", updateUser });
+  } catch (error) {
+    console.error("Error: ", error);
+    res.status(500).json({ success: false, message: `Error in : ${error}` });
   }
 };

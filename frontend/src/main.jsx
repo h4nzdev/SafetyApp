@@ -5,15 +5,18 @@ import "./index.css";
 import App from "./App.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 import { ReportProvider } from "./context/ReportContext.jsx";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <ReportProvider>
-        <UserProvider>
-          <App />
-        </UserProvider>
-      </ReportProvider>
+      <ThemeProvider>
+        <ReportProvider>
+          <UserProvider>
+            <App />
+          </UserProvider>
+        </ReportProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>
 );

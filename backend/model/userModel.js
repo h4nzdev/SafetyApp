@@ -5,6 +5,8 @@ const UserSchema = new mongoose.Schema({
   email: String,
   phone: String,
   password: String,
+  address: String,
+  department: String,
 });
 
 const User = mongoose.model("users", UserSchema);

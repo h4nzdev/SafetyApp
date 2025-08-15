@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import LocationPicker from "../components/LocationPicker";
 import { MapPin, Camera, Send, AlertTriangle } from "lucide-react";
 import axios from "axios";
+import { ReportContext } from "../context/ReportContext";
+import { useTheme } from "../context/ThemeContext";
 
 function IncidentReportForm() {
   const [formData, setFormData] = useState({
@@ -13,6 +15,9 @@ function IncidentReportForm() {
     photo: null,
     status: "Active",
   });
+
+  const { fetchReports } = useContext(ReportContext);
+  const { isDarkMode } = useTheme();
 
   // For map location picker
   const [pickedLocation, setPickedLocation] = useState(null);
@@ -46,7 +51,13 @@ function IncidentReportForm() {
           photo: null,
           status: "Active",
         });
-        alert(res.data.message);
+        setPickedLocation(null);
+        fetchReports();
+        Swal.fire({
+          icon: "success",
+          title: "Updated Information",
+          text: res.data.message,
+        });
       } else {
         return;
       }
@@ -73,11 +84,11 @@ function IncidentReportForm() {
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+      <div className={`${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} rounded-2xl border p-8 shadow-sm`}>
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Incident Type */}
           <div>
-            <label className="block text-lg font-semibold text-slate-800 mb-4">
+            <label className={`block text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>
               Incident Type <span className="text-red-500">*</span>
             </label>
             <select
@@ -85,7 +96,11 @@ function IncidentReportForm() {
               onChange={(e) =>
                 setFormData({ ...formData, type: e.target.value })
               }
-              className="w-full px-6 py-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-slate-50 text-slate-700 text-lg transition-all duration-200"
+              className={`w-full px-6 py-4 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 text-lg transition-all duration-200 ${
+                isDarkMode 
+                  ? 'border-slate-600 bg-slate-700 text-white' 
+                  : 'border-slate-300 bg-slate-50 text-slate-700'
+              }`}
               required
             >
               <option value="">Select incident type</option>
@@ -99,7 +114,7 @@ function IncidentReportForm() {
 
           {/* Location (with map picker) */}
           <div>
-            <label className="block text-lg font-semibold text-slate-800 mb-4">
+            <label className={`block text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>
               Location <span className="text-red-500">*</span>
             </label>
             <div className="mb-2">
@@ -115,7 +130,7 @@ function IncidentReportForm() {
               />
             </div>
             <div className="relative">
-              <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 text-slate-400" />
+              <MapPin className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 ${isDarkMode ? 'text-slate-300' : 'text-slate-400'}`} />
               <input
                 type="text"
                 value={formData.location}
@@ -123,13 +138,17 @@ function IncidentReportForm() {
                   setFormData({ ...formData, location: e.target.value });
                   setPickedLocation(null); // manual entry disables map marker
                 }}
-                className="w-full pl-14 pr-6 py-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-slate-50 text-slate-700 placeholder-slate-400 text-lg transition-all duration-200"
+                className={`w-full pl-14 pr-6 py-4 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 placeholder-slate-400 text-lg transition-all duration-200 ${
+                  isDarkMode 
+                    ? 'border-slate-600 bg-slate-700 text-white placeholder-slate-300' 
+                    : 'border-slate-300 bg-slate-50 text-slate-700 placeholder-slate-400'
+                }`}
                 placeholder="Enter the location or pick on map"
                 required
               />
             </div>
             {pickedLocation && (
-              <div className="text-sm text-slate-500 mt-1">
+              <div className={`text-sm ${isDarkMode ? 'text-slate-300' : 'text-slate-500'} mt-1`}>
                 Picked: {pickedLocation.lat.toFixed(5)},{" "}
                 {pickedLocation.lng.toFixed(5)}
               </div>
@@ -138,7 +157,7 @@ function IncidentReportForm() {
 
           {/* Description */}
           <div>
-            <label className="block text-lg font-semibold text-slate-800 mb-4">
+            <label className={`block text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>
               Description <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -147,7 +166,11 @@ function IncidentReportForm() {
                 setFormData({ ...formData, description: e.target.value })
               }
               rows={6}
-              className="w-full px-6 py-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-slate-50 text-slate-700 placeholder-slate-400 text-lg resize-none transition-all duration-200"
+              className={`w-full px-6 py-4 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 placeholder-slate-400 text-lg resize-none transition-all duration-200 ${
+                isDarkMode 
+                  ? 'border-slate-600 bg-slate-700 text-white placeholder-slate-300' 
+                  : 'border-slate-300 bg-slate-50 text-slate-700 placeholder-slate-400'
+              }`}
               placeholder="Describe what happened in detail..."
               required
             />
@@ -155,7 +178,7 @@ function IncidentReportForm() {
 
           {/* Time */}
           <div>
-            <label className="block text-lg font-semibold text-slate-800 mb-4">
+            <label className={`block text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>
               Time <span className="text-red-500">*</span>
             </label>
             <input
@@ -164,14 +187,18 @@ function IncidentReportForm() {
               onChange={(e) =>
                 setFormData({ ...formData, time: e.target.value })
               }
-              className="w-full px-6 py-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-slate-50 text-slate-700 text-lg transition-all duration-200"
+              className={`w-full px-6 py-4 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 text-lg transition-all duration-200 ${
+                isDarkMode 
+                  ? 'border-slate-600 bg-slate-700 text-white' 
+                  : 'border-slate-300 bg-slate-50 text-slate-700'
+              }`}
               required
             />
           </div>
 
           {/* Severity */}
           <div>
-            <label className="block text-lg font-semibold text-slate-800 mb-4">
+            <label className={`block text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>
               Severity <span className="text-red-500">*</span>
             </label>
             <select
@@ -179,7 +206,11 @@ function IncidentReportForm() {
               onChange={(e) =>
                 setFormData({ ...formData, severity: e.target.value })
               }
-              className="w-full px-6 py-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-slate-50 text-slate-700 text-lg transition-all duration-200"
+              className={`w-full px-6 py-4 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 text-lg transition-all duration-200 ${
+                isDarkMode 
+                  ? 'border-slate-600 bg-slate-700 text-white' 
+                  : 'border-slate-300 bg-slate-50 text-slate-700'
+              }`}
               required
             >
               {severityLevels.map((level) => (
@@ -192,17 +223,21 @@ function IncidentReportForm() {
 
           {/* Photo */}
           <div>
-            <label className="block text-lg font-semibold text-slate-800 mb-4">
+            <label className={`block text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-4`}>
               Photo Evidence (Optional)
             </label>
-            <div className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-red-300 transition-all duration-200 bg-slate-50 hover:bg-red-50">
+            <div className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 ${
+              isDarkMode 
+                ? 'border-slate-600 bg-slate-700 hover:border-red-500 hover:bg-slate-600' 
+                : 'border-slate-300 bg-slate-50 hover:border-red-300 hover:bg-red-50'
+            }`}>
               <div className="bg-red-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Camera className="w-8 h-8 text-red-600" />
               </div>
-              <p className="text-slate-600 text-lg mb-2">
+              <p className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'} text-lg mb-2`}>
                 Click to upload a photo
               </p>
-              <p className="text-slate-500 text-sm">
+              <p className={`${isDarkMode ? 'text-slate-400' : 'text-slate-500'} text-sm`}>
                 Supports JPG, PNG, GIF up to 10MB
               </p>
               <input

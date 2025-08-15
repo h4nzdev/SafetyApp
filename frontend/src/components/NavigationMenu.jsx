@@ -11,9 +11,13 @@ import {
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { useTheme } from "../context/ThemeContext";
 
 function NavigationMenu() {
   const navigate = useNavigate();
+  const { isDarkMode } = useTheme();
+  
   const menuItems = [
     { id: "home", label: "Home", icon: Home, link: "/homepage" },
     {
@@ -37,24 +41,39 @@ function NavigationMenu() {
     return location.pathname === pathURL;
   };
 
-  const handleLogout = () => {
-    const confirmed = confirm("Are you sure you want to logout?");
-    if (confirmed) {
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "Logout Confirmation",
+      text: "Are you sure you want to logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
       sessionStorage.removeItem("user");
+      Swal.fire({
+        title: "Logged Out!",
+        text: "You have been successfully logged out.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
       navigate("/");
-    } else {
-      return;
     }
   };
 
   return (
-    <nav className="md:flex hidden fixed left-0 top-0 bottom-0 bg-white shadow-lg z-50 w-64 flex-col border-r border-slate-200">
+    <nav className={`md:flex hidden fixed left-0 top-0 bottom-0 ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} shadow-lg z-50 w-64 flex-col border-r`}>
       {/* Simple Header */}
-      <div className="flex items-center p-6 border-b border-slate-200">
+      <div className={`flex items-center p-6 border-b ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}>
         <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center mr-3">
           <AlertTriangle className="w-5 h-5 text-white" />
         </div>
-        <span className="font-bold text-lg text-slate-800">Emergency App</span>
+        <span className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Emergency App</span>
       </div>
 
       {/* Clean Navigation Items */}
@@ -67,11 +86,21 @@ function NavigationMenu() {
               <button
                 className={`w-full flex items-center px-4 py-3 rounded-lg mb-2 transition-colors cursor-pointer ${
                   active
-                    ? "bg-red-50 text-red-700 border-r-2 border-red-600"
-                    : "text-slate-700 hover:bg-slate-50"
+                    ? isDarkMode 
+                      ? "bg-red-900 text-red-300 border-r-2 border-red-500"
+                      : "bg-red-50 text-red-700 border-r-2 border-red-600"
+                    : isDarkMode
+                      ? "text-slate-300 hover:bg-slate-700"
+                      : "text-slate-700 hover:bg-slate-50"
                 }`}
               >
-                <IconComponent className={`w-5 h-5 mr-3 ${active ? 'text-red-600' : 'text-slate-500'}`} />
+                <IconComponent
+                  className={`w-5 h-5 mr-3 ${
+                    active 
+                      ? isDarkMode ? "text-red-400" : "text-red-600"
+                      : isDarkMode ? "text-slate-400" : "text-slate-500"
+                  }`}
+                />
                 <span className="font-medium">{item.label}</span>
               </button>
             </Link>
@@ -80,12 +109,12 @@ function NavigationMenu() {
       </div>
 
       {/* Simple Logout */}
-      <div className="p-4 border-t border-slate-200">
+      <div className={`p-4 border-t ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center px-4 py-3 rounded-lg text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+          className={`w-full flex items-center px-4 py-3 rounded-lg ${isDarkMode ? 'text-slate-300 hover:bg-slate-700' : 'text-slate-700 hover:bg-slate-50'} transition-colors cursor-pointer`}
         >
-          <LogOut className="w-5 h-5 mr-3 text-slate-500" />
+          <LogOut className={`w-5 h-5 mr-3 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`} />
           <span className="font-medium">Logout</span>
         </button>
       </div>
