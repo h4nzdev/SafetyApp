@@ -22,7 +22,7 @@ function SettingsPages() {
       {/* Header */}
       <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl p-8 text-white">
         <div className="flex items-center space-x-4">
-          <div className="bg-white bg-opacity-20 w-16 h-16 rounded-2xl flex items-center justify-center">
+          <div className="bg-white/20 bg-opacity-20 w-16 h-16 rounded-2xl flex items-center justify-center">
             <Settings className="w-8 h-8 text-white" />
           </div>
           <div>

@@ -9,8 +9,8 @@ import MainLayout from "./layouts/MainLayout";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserAccount from "./pages/UserAccount";
-import Settings from "./pages/Settings";
 import SettingsPages from "./pages/Settings";
+import IncidentsFeed from "./pages/IncidentsFeed";
 
 const App = () => {
   return (
@@ -75,6 +75,16 @@ const App = () => {
           <ProtectedRoute>
             <MainLayout>
               <SettingsPages />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/feed"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <IncidentsFeed />
             </MainLayout>
           </ProtectedRoute>
         }

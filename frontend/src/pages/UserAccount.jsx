@@ -47,7 +47,7 @@ function UserAccount() {
       {/* Header */}
       <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl p-8 text-white">
         <div className="flex items-center space-x-4">
-          <div className="bg-white bg-opacity-20 w-16 h-16 rounded-2xl flex items-center justify-center">
+          <div className="bg-white/20 bg-opacity-20 w-16 h-16 rounded-2xl flex items-center justify-center">
             <User className="w-8 h-8 text-white" />
           </div>
           <div>
@@ -60,19 +60,39 @@ function UserAccount() {
       </div>
 
       {/* Profile Information */}
-      <div className={`${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} border rounded-2xl p-8 shadow-sm`}>
+      <div
+        className={`${
+          isDarkMode
+            ? "bg-slate-800 border-slate-700"
+            : "bg-white border-slate-200"
+        } border rounded-2xl p-8 shadow-sm`}
+      >
         <div className="flex items-start justify-between mb-8">
-          <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
+          <h3
+            className={`text-xl font-bold ${
+              isDarkMode ? "text-white" : "text-slate-800"
+            }`}
+          >
             Personal Information
           </h3>
 
           {isEdit ? (
             <button
               onClick={() => setIsEdit(false)}
-              className={`flex items-center space-x-2 px-4 py-2 ${isDarkMode ? 'bg-slate-700 hover:bg-slate-600' : 'bg-gray-100 hover:bg-slate-200'} rounded-xl transition-colors duration-200`}
+              className={`flex items-center space-x-2 px-4 py-2 ${
+                isDarkMode
+                  ? "bg-slate-700 hover:bg-slate-600"
+                  : "bg-gray-100 hover:bg-slate-200"
+              } rounded-xl transition-colors duration-200`}
             >
               <X className="w-4 h-4" />
-              <span className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-slate-700'}`}>Cancel</span>
+              <span
+                className={`text-sm font-medium ${
+                  isDarkMode ? "text-white" : "text-slate-700"
+                }`}
+              >
+                Cancel
+              </span>
             </button>
           ) : (
             <button
@@ -88,8 +108,16 @@ function UserAccount() {
         <div className="flex flex-col md:flex-row items-start space-y-6 md:space-y-0 md:space-x-8">
           {/* Profile Picture */}
           <div className="relative flex-shrink-0">
-            <div className={`w-32 h-32 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-200'} rounded-2xl flex items-center justify-center`}>
-              <User className={`w-16 h-16 ${isDarkMode ? 'text-slate-300' : 'text-slate-400'}`} />
+            <div
+              className={`w-32 h-32 ${
+                isDarkMode ? "bg-slate-700" : "bg-slate-200"
+              } rounded-2xl flex items-center justify-center`}
+            >
+              <User
+                className={`w-16 h-16 ${
+                  isDarkMode ? "text-slate-300" : "text-slate-400"
+                }`}
+              />
             </div>
             <button className="absolute -bottom-2 -right-2 bg-red-600 hover:bg-red-700 text-white w-10 h-10 rounded-xl flex items-center justify-center transition-colors duration-200">
               <Camera className="w-4 h-4" />
@@ -100,7 +128,11 @@ function UserAccount() {
           <form onSubmit={handleUpdate} className="flex-1 w-full">
             <div className="grid grid-cols-1 gap-6">
               <div>
-                <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-500'}`}>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? "text-slate-300" : "text-slate-500"
+                  }`}
+                >
                   Full Name
                 </label>
                 <input
@@ -111,15 +143,19 @@ function UserAccount() {
                     setFormData({ ...formData, name: e.target.value })
                   }
                   className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                    isDarkMode 
-                      ? 'border-slate-600 bg-slate-700 text-white' 
-                      : 'border-slate-200 bg-white text-slate-700'
+                    isDarkMode
+                      ? "border-slate-600 bg-slate-700 text-white"
+                      : "border-slate-200 bg-white text-slate-700"
                   }`}
                 />
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-500'}`}>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? "text-slate-300" : "text-slate-500"
+                  }`}
+                >
                   Email
                 </label>
                 <input
@@ -130,15 +166,19 @@ function UserAccount() {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                    isDarkMode 
-                      ? 'border-slate-600 bg-slate-700 text-white' 
-                      : 'border-slate-200 bg-white text-slate-700'
+                    isDarkMode
+                      ? "border-slate-600 bg-slate-700 text-white"
+                      : "border-slate-200 bg-white text-slate-700"
                   }`}
                 />
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-500'}`}>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? "text-slate-300" : "text-slate-500"
+                  }`}
+                >
                   Phone Number
                 </label>
                 <input
@@ -149,15 +189,19 @@ function UserAccount() {
                     setFormData({ ...formData, phone: e.target.value })
                   }
                   className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                    isDarkMode 
-                      ? 'border-slate-600 bg-slate-700 text-white' 
-                      : 'border-slate-200 bg-white text-slate-700'
+                    isDarkMode
+                      ? "border-slate-600 bg-slate-700 text-white"
+                      : "border-slate-200 bg-white text-slate-700"
                   }`}
                 />
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-500'}`}>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? "text-slate-300" : "text-slate-500"
+                  }`}
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -169,15 +213,19 @@ function UserAccount() {
                       setFormData({ ...formData, password: e.target.value })
                     }
                     className={`w-full px-4 py-3 pr-12 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                      isDarkMode 
-                        ? 'border-slate-600 bg-slate-700 text-white' 
-                        : 'border-slate-200 bg-white text-slate-700'
+                      isDarkMode
+                        ? "border-slate-600 bg-slate-700 text-white"
+                        : "border-slate-200 bg-white text-slate-700"
                     }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-slate-400 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
+                    className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${
+                      isDarkMode
+                        ? "text-slate-400 hover:text-slate-300"
+                        : "text-slate-400 hover:text-slate-600"
+                    }`}
                   >
                     {showPassword ? (
                       <EyeOff className="w-5 h-5" />
@@ -189,7 +237,11 @@ function UserAccount() {
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-500'}`}>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? "text-slate-300" : "text-slate-500"
+                  }`}
+                >
                   Department
                 </label>
                 <input
@@ -200,15 +252,19 @@ function UserAccount() {
                   }
                   type="text"
                   className={`w-full px-4 capitalize py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                    isDarkMode 
-                      ? 'border-slate-600 bg-slate-700 text-white' 
-                      : 'border-slate-200 bg-white text-slate-700'
+                    isDarkMode
+                      ? "border-slate-600 bg-slate-700 text-white"
+                      : "border-slate-200 bg-white text-slate-700"
                   }`}
                 />
               </div>
 
               <div>
-                <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-500'}`}>
+                <label
+                  className={`block text-sm font-medium mb-2 ${
+                    isDarkMode ? "text-slate-300" : "text-slate-500"
+                  }`}
+                >
                   Address
                 </label>
                 <input
@@ -220,9 +276,9 @@ function UserAccount() {
                   type="text"
                   defaultValue="123 Emergency St, City, State 12345"
                   className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
-                    isDarkMode 
-                      ? 'border-slate-600 bg-slate-700 text-white' 
-                      : 'border-slate-200 bg-white text-slate-700'
+                    isDarkMode
+                      ? "border-slate-600 bg-slate-700 text-white"
+                      : "border-slate-200 bg-white text-slate-700"
                   }`}
                 />
               </div>
@@ -246,24 +302,82 @@ function UserAccount() {
       </div>
 
       {/* Account Summary */}
-      <div className={`${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} border rounded-2xl p-6 shadow-sm`}>
-        <h3 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'} mb-6`}>
+      <div
+        className={`${
+          isDarkMode
+            ? "bg-slate-800 border-slate-700"
+            : "bg-white border-slate-200"
+        } border rounded-2xl p-6 shadow-sm`}
+      >
+        <h3
+          className={`text-xl font-bold ${
+            isDarkMode ? "text-white" : "text-slate-800"
+          } mb-6`}
+        >
           Account Summary
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className={`text-center p-4 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-50'} rounded-xl`}>
-            <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>EMP-2024-001</p>
-            <p className={`${isDarkMode ? 'text-slate-300' : 'text-slate-500'} text-sm mt-1`}>Employee ID</p>
+          <div
+            className={`text-center p-4 ${
+              isDarkMode ? "bg-slate-700" : "bg-slate-50"
+            } rounded-xl`}
+          >
+            <p
+              className={`text-2xl font-bold ${
+                isDarkMode ? "text-white" : "text-slate-800"
+              }`}
+            >
+              EMP-2024-001
+            </p>
+            <p
+              className={`${
+                isDarkMode ? "text-slate-300" : "text-slate-500"
+              } text-sm mt-1`}
+            >
+              Employee ID
+            </p>
           </div>
 
-          <div className={`text-center p-4 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-50'} rounded-xl`}>
-            <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Active</p>
-            <p className={`${isDarkMode ? 'text-slate-300' : 'text-slate-500'} text-sm mt-1`}>Account Status</p>
+          <div
+            className={`text-center p-4 ${
+              isDarkMode ? "bg-slate-700" : "bg-slate-50"
+            } rounded-xl`}
+          >
+            <p
+              className={`text-2xl font-bold ${
+                isDarkMode ? "text-white" : "text-slate-800"
+              }`}
+            >
+              Active
+            </p>
+            <p
+              className={`${
+                isDarkMode ? "text-slate-300" : "text-slate-500"
+              } text-sm mt-1`}
+            >
+              Account Status
+            </p>
           </div>
 
-          <div className={`text-center p-4 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-50'} rounded-xl`}>
-            <p className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Jan 15, 2024</p>
-            <p className={`${isDarkMode ? 'text-slate-300' : 'text-slate-500'} text-sm mt-1`}>Member Since</p>
+          <div
+            className={`text-center p-4 ${
+              isDarkMode ? "bg-slate-700" : "bg-slate-50"
+            } rounded-xl`}
+          >
+            <p
+              className={`text-2xl font-bold ${
+                isDarkMode ? "text-white" : "text-slate-800"
+              }`}
+            >
+              Jan 15, 2024
+            </p>
+            <p
+              className={`${
+                isDarkMode ? "text-slate-300" : "text-slate-500"
+              } text-sm mt-1`}
+            >
+              Member Since
+            </p>
           </div>
         </div>
       </div>
