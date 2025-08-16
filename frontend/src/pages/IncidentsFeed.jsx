@@ -13,6 +13,7 @@ import {
 import { useTheme } from "../context/ThemeContext";
 import { ReportContext } from "../context/ReportContext";
 import { useIncidentAddresses } from "../components/incidentmap/useIncidentAddresses";
+import { Link } from "react-router-dom";
 
 function parseLocation(loc) {
   if (!loc) return null;
@@ -105,13 +106,15 @@ function IncidentsFeed() {
                         isDarkMode ? "text-slate-400" : "text-slate-500"
                       }`}
                     />
-                    <span
-                      className={`text-sm font-bold underline cursor-pointer ${
-                        isDarkMode ? "text-slate-400" : "text-slate-600"
-                      }`}
-                    >
-                      {report.name}
-                    </span>
+                    <Link to={`/profile-visit/${report.user.id}`}>
+                      <span
+                        className={`text-sm font-bold underline cursor-pointer ${
+                          isDarkMode ? "text-slate-400" : "text-slate-600"
+                        }`}
+                      >
+                        {report.user.name}
+                      </span>
+                    </Link>
                   </div>
                   <div className="flex items-center space-x-2">
                     <MapPin

@@ -11,6 +11,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UserAccount from "./pages/UserAccount";
 import SettingsPages from "./pages/Settings";
 import IncidentsFeed from "./pages/IncidentsFeed";
+import AccountProfileVisit from "./pages/AccountProfileVisit";
 
 const App = () => {
   return (
@@ -85,6 +86,16 @@ const App = () => {
           <ProtectedRoute>
             <MainLayout>
               <IncidentsFeed />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile-visit/:id"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <AccountProfileVisit />
             </MainLayout>
           </ProtectedRoute>
         }

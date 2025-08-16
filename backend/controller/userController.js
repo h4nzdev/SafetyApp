@@ -15,6 +15,23 @@ export const getUsers = async (req, res) => {
   }
 };
 
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const findUser = await User.findById(id);
+    if (!findUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Cannot find the user!" });
+    }
+
+    res.status(200).json({ success: true, findUser });
+  } catch (error) {
+    console.error("Error :", error)
+    res.status(500).json({success: false, message: "Server error in fetching the user!"})
+  }
+};
+
 // REGISTER a new user
 export const registerUser = async (req, res) => {
   try {
@@ -86,9 +103,11 @@ export const updateUser = async (req, res) => {
       new: true,
     });
 
-    res
-      .status(200)
-      .json({ success: true, message: "User updated successfully", updateUser });
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      updateUser,
+    });
   } catch (error) {
     console.error("Error: ", error);
     res.status(500).json({ success: false, message: `Error in : ${error}` });

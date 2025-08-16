@@ -17,7 +17,10 @@ const ReportSchema = new mongoose.Schema({
     type: String,
     default: "Active",
   },
-  name: String,
+  user: {
+    name: String,
+    id: String,
+  },
 });
 
 const Report = mongoose.model("reports", ReportSchema);

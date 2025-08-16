@@ -22,10 +22,18 @@ function UploadBox({ isDarkMode, formData, setFormData }) {
       <div className="bg-red-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
         <Camera className="w-8 h-8 text-red-600" />
       </div>
-      <p className={`${isDarkMode ? "text-slate-300" : "text-slate-600"} text-lg mb-2`}>
+      <p
+        className={`${
+          isDarkMode ? "text-slate-300" : "text-slate-600"
+        } text-lg mb-2`}
+      >
         Click to upload a photo
       </p>
-      <p className={`${isDarkMode ? "text-slate-400" : "text-slate-500"} text-sm`}>
+      <p
+        className={`${
+          isDarkMode ? "text-slate-400" : "text-slate-500"
+        } text-sm`}
+      >
         Supports JPG, PNG, GIF up to 10MB
       </p>
 
@@ -34,9 +42,7 @@ function UploadBox({ isDarkMode, formData, setFormData }) {
         type="file"
         accept="image/*"
         className="hidden"
-        onChange={(e) =>
-          setFormData({ ...formData, photo: e.target.files[0] })
-        }
+        onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
       />
     </div>
   );
@@ -48,7 +54,7 @@ import Swal from "sweetalert2";
 import { UserContext } from "../context/UserContext";
 
 function IncidentReportForm() {
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext);
   const [formData, setFormData] = useState({
     type: "",
     location: "",
@@ -57,7 +63,10 @@ function IncidentReportForm() {
     severity: "medium",
     photo: null,
     status: "Active",
-    name: user.name
+    user: {
+      name: user.name,
+      id: user._id,
+    },
   });
 
   const { fetchReports } = useContext(ReportContext);
