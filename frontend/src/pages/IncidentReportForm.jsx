@@ -1,12 +1,54 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef } from "react";
 import LocationPicker from "../components/LocationPicker";
 import { MapPin, Camera, Send, AlertTriangle } from "lucide-react";
+
+function UploadBox({ isDarkMode, formData, setFormData }) {
+  const fileInputRef = useRef(null);
+
+  const handleBoxClick = () => {
+    fileInputRef.current.click();
+  };
+
+  return (
+    <div
+      onClick={handleBoxClick}
+      className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 cursor-pointer
+        ${
+          isDarkMode
+            ? "border-slate-600 bg-slate-700 hover:border-red-500 hover:bg-slate-600"
+            : "border-slate-300 bg-slate-50 hover:border-red-300 hover:bg-red-50"
+        }`}
+    >
+      <div className="bg-red-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <Camera className="w-8 h-8 text-red-600" />
+      </div>
+      <p className={`${isDarkMode ? "text-slate-300" : "text-slate-600"} text-lg mb-2`}>
+        Click to upload a photo
+      </p>
+      <p className={`${isDarkMode ? "text-slate-400" : "text-slate-500"} text-sm`}>
+        Supports JPG, PNG, GIF up to 10MB
+      </p>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) =>
+          setFormData({ ...formData, photo: e.target.files[0] })
+        }
+      />
+    </div>
+  );
+}
 import axios from "axios";
 import { ReportContext } from "../context/ReportContext";
 import { useTheme } from "../context/ThemeContext";
 import Swal from "sweetalert2";
+import { UserContext } from "../context/UserContext";
 
 function IncidentReportForm() {
+  const {user} = useContext(UserContext)
   const [formData, setFormData] = useState({
     type: "",
     location: "",
@@ -15,6 +57,7 @@ function IncidentReportForm() {
     severity: "medium",
     photo: null,
     status: "Active",
+    name: user.name
   });
 
   const { fetchReports } = useContext(ReportContext);

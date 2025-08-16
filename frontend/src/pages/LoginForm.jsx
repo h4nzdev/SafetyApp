@@ -11,6 +11,7 @@ function LoginForm() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext); // Get setUser function from context
   const { isDarkMode } = useTheme();
+  const [message, setMessage] = useState(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,28 +27,65 @@ function LoginForm() {
         alert(res.data.message);
       }
     } catch (error) {
-      console.error("Error :", error);
+      if (error.response) {
+        setMessage(error.response.data.message) // Show backend message
+      } else {
+        console.error("Error:", error.message);
+        alert("Something went wrong. Please try again later.");
+      }
     }
   };
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900' : 'bg-gradient-to-br from-slate-50 via-red-50 to-slate-100'} flex items-center justify-center p-4`}>
-      <div className={`${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} rounded-3xl shadow-2xl w-full max-w-md p-8 border`}>
+    <div
+      className={`min-h-screen ${
+        isDarkMode
+          ? "bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+          : "bg-gradient-to-br from-slate-50 via-red-50 to-slate-100"
+      } flex items-center justify-center p-4`}
+    >
+      <div
+        className={`${
+          isDarkMode
+            ? "bg-slate-800 border-slate-700"
+            : "bg-white border-slate-200"
+        } rounded-3xl shadow-2xl w-full max-w-md p-8 border`}
+      >
         <div className="text-center mb-8">
           <div className="bg-gradient-to-br from-red-500 to-red-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
             <AlertTriangle className="w-10 h-10 text-white" />
           </div>
-          <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>Emergency App</h1>
-          <p className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'} mt-3 text-lg`}>Sign in to your account</p>
+          <h1
+            className={`text-3xl font-bold ${
+              isDarkMode ? "text-white" : "text-slate-800"
+            }`}
+          >
+            Emergency App
+          </h1>
+          <p
+            className={`${
+              isDarkMode ? "text-slate-300" : "text-slate-600"
+            } mt-3 text-lg`}
+          >
+            Sign in to your account
+          </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className={`block text-sm font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-700'} mb-3`}>
+            <label
+              className={`block text-sm font-semibold ${
+                isDarkMode ? "text-slate-200" : "text-slate-700"
+              } mb-3`}
+            >
               Email Address
             </label>
             <div className="relative">
-              <Mail className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${isDarkMode ? 'text-slate-400' : 'text-slate-400'}`} />
+              <Mail
+                className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                  isDarkMode ? "text-slate-400" : "text-slate-400"
+                }`}
+              />
               <input
                 type="email"
                 value={formData.email}
@@ -55,9 +93,9 @@ function LoginForm() {
                   setFormData({ ...formData, email: e.target.value })
                 }
                 className={`w-full pl-12 pr-4 py-4 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 ${
-                  isDarkMode 
-                    ? 'border-slate-600 bg-slate-700 text-white placeholder-slate-300' 
-                    : 'border-slate-300 bg-slate-50 text-slate-700 placeholder-slate-400'
+                  isDarkMode
+                    ? "border-slate-600 bg-slate-700 text-white placeholder-slate-300"
+                    : "border-slate-300 bg-slate-50 text-slate-700 placeholder-slate-400"
                 }`}
                 placeholder="Enter your email"
                 required
@@ -66,11 +104,19 @@ function LoginForm() {
           </div>
 
           <div>
-            <label className={`block text-sm font-semibold ${isDarkMode ? 'text-slate-200' : 'text-slate-700'} mb-3`}>
+            <label
+              className={`block text-sm font-semibold ${
+                isDarkMode ? "text-slate-200" : "text-slate-700"
+              } mb-3`}
+            >
               Password
             </label>
             <div className="relative">
-              <Lock className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${isDarkMode ? 'text-slate-400' : 'text-slate-400'}`} />
+              <Lock
+                className={`absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
+                  isDarkMode ? "text-slate-400" : "text-slate-400"
+                }`}
+              />
               <input
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
@@ -78,9 +124,9 @@ function LoginForm() {
                   setFormData({ ...formData, password: e.target.value })
                 }
                 className={`w-full pl-12 pr-12 py-4 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 ${
-                  isDarkMode 
-                    ? 'border-slate-600 bg-slate-700 text-white placeholder-slate-300' 
-                    : 'border-slate-300 bg-slate-50 text-slate-700 placeholder-slate-400'
+                  isDarkMode
+                    ? "border-slate-600 bg-slate-700 text-white placeholder-slate-300"
+                    : "border-slate-300 bg-slate-50 text-slate-700 placeholder-slate-400"
                 }`}
                 placeholder="Enter your password"
                 required
@@ -88,7 +134,11 @@ function LoginForm() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${isDarkMode ? 'text-slate-400 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'} transition-colors`}
+                className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${
+                  isDarkMode
+                    ? "text-slate-400 hover:text-slate-300"
+                    : "text-slate-400 hover:text-slate-600"
+                } transition-colors`}
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -97,6 +147,10 @@ function LoginForm() {
                 )}
               </button>
             </div>
+          </div>
+
+          <div>
+            <p className="text-red-400">{message}</p>
           </div>
 
           <button
@@ -109,7 +163,7 @@ function LoginForm() {
         </form>
 
         <div className="mt-8 text-center">
-          <p className={`${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+          <p className={`${isDarkMode ? "text-slate-300" : "text-slate-600"}`}>
             Don't have an account?{" "}
             <Link
               to="/register"

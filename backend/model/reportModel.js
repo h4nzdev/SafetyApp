@@ -17,6 +17,7 @@ const ReportSchema = new mongoose.Schema({
     type: String,
     default: "Active",
   },
+  name: String,
 });
 
 const Report = mongoose.model("reports", ReportSchema);

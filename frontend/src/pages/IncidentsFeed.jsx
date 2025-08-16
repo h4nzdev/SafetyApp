@@ -101,16 +101,16 @@ function IncidentsFeed() {
                 <div className="flex items-center space-x-6">
                   <div className="flex items-center space-x-2">
                     <User
-                      className={`w-4 h-4 ${
+                      className={`w-4 h-4 font-bold ${
                         isDarkMode ? "text-slate-400" : "text-slate-500"
                       }`}
                     />
                     <span
-                      className={`text-sm ${
+                      className={`text-sm font-bold underline cursor-pointer ${
                         isDarkMode ? "text-slate-400" : "text-slate-600"
                       }`}
                     >
-                      John Smith - Fire Department
+                      {report.name}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
