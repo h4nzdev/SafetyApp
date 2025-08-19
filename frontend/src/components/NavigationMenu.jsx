@@ -12,6 +12,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useTheme } from "../context/ThemeContext";
+import savvi from "/savvi.png";
 
 function NavigationMenu() {
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ function NavigationMenu() {
         }`}
       >
         <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center mr-3">
-          <AlertTriangle className="w-5 h-5 text-white" />
+          <img src={savvi} alt="Savvi" />
         </div>
         <span
           className={`font-bold text-lg ${

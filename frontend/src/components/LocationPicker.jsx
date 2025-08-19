@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -33,12 +33,37 @@ function LocationMarker({ onChange, value }) {
  * @param {object} value - Initial value {lat, lng}
  */
 const LocationPicker = ({ onChange, value }) => {
-  // Default center: Cebu, Philippines
-  const defaultCenter = value || { lat: 10.3157, lng: 123.8854 }; // Cebu City
+  const [center, setCenter] = useState(
+    value || { lat: 10.3157, lng: 123.8854 }
+  ); // Default to Cebu City
+
+  useEffect(() => {
+    // Get user's current location if available
+    if (!value && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setCenter(userLocation);
+          if (onChange) onChange(userLocation);
+        },
+        (error) => {
+          console.log("Geolocation error:", error);
+          // Keep default center if geolocation fails
+        }
+      );
+    }
+  }, []);
 
   return (
     <div style={{ height: "300px", width: "100%", marginBottom: 16 }}>
-      <MapContainer center={defaultCenter} zoom={13} style={{ height: "100%", width: "100%" }}>
+      <MapContainer
+        center={center}
+        zoom={13}
+        style={{ height: "100%", width: "100%" }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

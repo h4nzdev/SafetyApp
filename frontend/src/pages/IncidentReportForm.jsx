@@ -1,56 +1,11 @@
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import LocationPicker from "../components/LocationPicker";
 import { MapPin, Camera, Send, AlertTriangle } from "lucide-react";
-
-function UploadBox({ isDarkMode, formData, setFormData }) {
-  const fileInputRef = useRef(null);
-
-  const handleBoxClick = () => {
-    fileInputRef.current.click();
-  };
-
-  return (
-    <div
-      onClick={handleBoxClick}
-      className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 cursor-pointer
-        ${
-          isDarkMode
-            ? "border-slate-600 bg-slate-700 hover:border-red-500 hover:bg-slate-600"
-            : "border-slate-300 bg-slate-50 hover:border-red-300 hover:bg-red-50"
-        }`}
-    >
-      <div className="bg-red-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
-        <Camera className="w-8 h-8 text-red-600" />
-      </div>
-      <p
-        className={`${
-          isDarkMode ? "text-slate-300" : "text-slate-600"
-        } text-lg mb-2`}
-      >
-        Click to upload a photo
-      </p>
-      <p
-        className={`${
-          isDarkMode ? "text-slate-400" : "text-slate-500"
-        } text-sm`}
-      >
-        Supports JPG, PNG, GIF up to 10MB
-      </p>
-
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        className="hidden"
-        onChange={(e) => setFormData({ ...formData, photo: e.target.files[0] })}
-      />
-    </div>
-  );
-}
+import { getAddressFromCoordinates, getCoordinatesFromAddress } from "../utils/geocoding";
 import axios from "axios";
 import { ReportContext } from "../context/ReportContext";
 import { useTheme } from "../context/ThemeContext";
-import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 import { UserContext } from "../context/UserContext";
 
 function IncidentReportForm() {
@@ -58,6 +13,7 @@ function IncidentReportForm() {
   const [formData, setFormData] = useState({
     type: "",
     location: "",
+    coordinates: "", // Add coordinates field to store lat,lng
     description: "",
     time: "",
     severity: "medium",
@@ -74,6 +30,32 @@ function IncidentReportForm() {
 
   // For map location picker
   const [pickedLocation, setPickedLocation] = useState(null);
+
+  // Get user's location when component mounts
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setPickedLocation(userLocation);
+          
+          // Get address from coordinates
+          const address = await getAddressFromCoordinates(userLocation.lat, userLocation.lng);
+          setFormData((prev) => ({
+            ...prev,
+            location: address,
+            coordinates: `${userLocation.lat},${userLocation.lng}` // Store coordinates separately
+          }));
+        },
+        (error) => {
+          console.log("Geolocation error:", error);
+        }
+      );
+    }
+  }, []);
 
   const incidentTypes = [
     "Accident",
@@ -105,10 +87,15 @@ function IncidentReportForm() {
           status: "Active",
         });
         setPickedLocation(null);
-        Swal.fire({
-          icon: "success",
-          title: "Reported",
-          text: res.data.message,
+        toast.success("Incident reported successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          className: "text-lg py-6 px-8",
         });
         fetchReports();
       } else {
@@ -187,12 +174,16 @@ function IncidentReportForm() {
             <div className="mb-2">
               <LocationPicker
                 value={pickedLocation}
-                onChange={(latlng) => {
-                  setPickedLocation(latlng);
-                  setFormData({
-                    ...formData,
-                    location: latlng ? `${latlng.lat},${latlng.lng}` : "",
-                  });
+                onChange={async (latlng) => {
+                  if (latlng) {
+                    setPickedLocation(latlng);
+                    const address = await getAddressFromCoordinates(latlng.lat, latlng.lng);
+                    setFormData({
+                      ...formData,
+                      location: address,
+                      coordinates: `${latlng.lat},${latlng.lng}`,
+                    });
+                  }
                 }}
               />
             </div>
@@ -207,7 +198,17 @@ function IncidentReportForm() {
                 value={formData.location}
                 onChange={(e) => {
                   setFormData({ ...formData, location: e.target.value });
-                  setPickedLocation(null); // manual entry disables map marker
+                  setPickedLocation(null);
+                }}
+                onBlur={async (e) => {
+                  const coords = await getCoordinatesFromAddress(e.target.value);
+                  if (coords) {
+                    setPickedLocation(coords);
+                    setFormData(prev => ({
+                      ...prev,
+                      coordinates: `${coords.lat},${coords.lng}`
+                    }));
+                  }
                 }}
                 className={`w-full pl-14 pr-6 py-4 border rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 placeholder-slate-400 text-lg transition-all duration-200 ${
                   isDarkMode

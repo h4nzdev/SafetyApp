@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react";
 import { User, Edit3, Camera, Eye, EyeOff, X } from "lucide-react";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
-import Swal from "sweetalert2";
 import { useTheme } from "../context/ThemeContext";
+import { toast } from "react-toastify";
 
 function UserAccount() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -28,10 +28,15 @@ function UserAccount() {
       );
       if (res.data.success) {
         setUser(res.data.updateUser);
-        Swal.fire({
-          icon: "success",
-          title: "Updated Information",
-          text: res.data.message,
+        toast.success("Account updated successfully", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          className: "text-lg py-6 px-8",
         });
         setIsEdit(false);
       }
@@ -369,7 +374,11 @@ function UserAccount() {
                 isDarkMode ? "text-white" : "text-slate-800"
               }`}
             >
-              Jan 15, 2024
+              {new Date(user.time).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
             </p>
             <p
               className={`${

@@ -1,13 +1,7 @@
 import { MapPin, Clock } from "lucide-react";
 import { formatTime } from "../../utils/formatTime";
 import { useTheme } from "../../context/ThemeContext";
-
-function parseLocation(loc) {
-  if (!loc) return null;
-  const [lat, lng] = loc.split(",").map(Number);
-  if (isNaN(lat) || isNaN(lng)) return null;
-  return { lat, lng };
-}
+import { parseLocation } from "../../hooks/parselocation";
 
 export default function IncidentList({
   reports,

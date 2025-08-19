@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/UserContext"; // Import UserContext
 import { useTheme } from "../context/ThemeContext";
+import savvi from "/savvi.png"
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -53,7 +54,7 @@ function LoginForm() {
       >
         <div className="text-center mb-8">
           <div className="bg-gradient-to-br from-red-500 to-red-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-            <AlertTriangle className="w-10 h-10 text-white" />
+            <img src={savvi} alt="Savvi" />
           </div>
           <h1
             className={`text-3xl font-bold ${

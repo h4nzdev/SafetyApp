@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   User,
   MapPin,
@@ -14,6 +14,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
+import { ReportContext } from "../context/ReportContext";
+import { parseLocation } from "../hooks/parselocation";
+import { useIncidentAddresses } from "../components/incidentmap/useIncidentAddresses";
+import { formatTime } from "../utils/formatTime";
 
 function AccountProfileVisit() {
   // Toggle this to true for dark mode
@@ -21,6 +25,10 @@ function AccountProfileVisit() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const { reports } = useContext(ReportContext);
+  const addresses = useIncidentAddresses(reports);
+
+  const getUserReport = reports.filter((report) => report?.user?.id === id);
 
   const fetchUser = async () => {
     try {
@@ -141,7 +149,7 @@ function AccountProfileVisit() {
                       isDarkMode ? "text-white" : "text-slate-800"
                     }`}
                   >
-                    23
+                    {getUserReport.length}
                   </div>
                   <div
                     className={`text-sm ${
@@ -209,113 +217,67 @@ function AccountProfileVisit() {
 
           <div className="space-y-4">
             {/* Report 1 */}
-            <div
-              className={`border rounded-xl p-4 ${
-                isDarkMode
-                  ? "border-slate-700 bg-slate-700/30"
-                  : "border-slate-200 bg-slate-50"
-              }`}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                  <h3
-                    className={`font-semibold ${
-                      isDarkMode ? "text-white" : "text-slate-800"
-                    }`}
-                  >
-                    Medical Emergency - Downtown Mall
-                  </h3>
-                  <p
-                    className={`text-sm mt-1 ${
-                      isDarkMode ? "text-slate-300" : "text-slate-600"
-                    }`}
-                  >
-                    Person collapsed in food court, CPR needed urgently
-                  </p>
-                </div>
-                <span
-                  className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                    isDarkMode
-                      ? "bg-green-900 text-green-300"
-                      : "bg-green-100 text-green-800"
-                  }`}
-                >
-                  Resolved
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-1">
-                    <MapPin
-                      className={`w-4 h-4 ${
-                        isDarkMode ? "text-slate-400" : "text-slate-500"
-                      }`}
-                    />
-                    <span
-                      className={`${
-                        isDarkMode ? "text-slate-400" : "text-slate-600"
-                      }`}
-                    >
-                      Central Mall, Food Court
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock
-                    className={`w-4 h-4 ${
-                      isDarkMode ? "text-slate-400" : "text-slate-500"
-                    }`}
-                  />
-                  <span
-                    className={`${
-                      isDarkMode ? "text-slate-400" : "text-slate-600"
-                    }`}
-                  >
-                    2 days ago
-                  </span>
-                </div>
-              </div>
-            </div>
 
-            {/* Report 2 */}
-            <div
-              className={`border rounded-xl p-4 ${
-                isDarkMode
-                  ? "border-slate-700 bg-slate-700/30"
-                  : "border-slate-200 bg-slate-50"
-              }`}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                  <h3
-                    className={`font-semibold ${
-                      isDarkMode ? "text-white" : "text-slate-800"
+            {getUserReport.map((report) => (
+              <div
+                className={`border rounded-xl p-4 ${
+                  isDarkMode
+                    ? "border-slate-700 bg-slate-700/30"
+                    : "border-slate-200 bg-slate-50"
+                }`}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <h3
+                      className={`font-semibold ${
+                        isDarkMode ? "text-white" : "text-slate-800"
+                      }`}
+                    >
+                      {report.type}
+                    </h3>
+                    <p
+                      className={`text-sm mt-1 ${
+                        isDarkMode ? "text-slate-300" : "text-slate-600"
+                      }`}
+                    >
+                      {report.description}
+                    </p>
+                  </div>
+                  <span
+                    className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                      isDarkMode
+                        ? "bg-green-900 text-green-300"
+                        : "bg-green-100 text-green-800"
                     }`}
                   >
-                    Suspicious Activity Near School
-                  </h3>
-                  <p
-                    className={`text-sm mt-1 ${
-                      isDarkMode ? "text-slate-300" : "text-slate-600"
-                    }`}
-                  >
-                    Unidentified person taking photos of school entrance
-                  </p>
+                    Resolved
+                  </span>
                 </div>
-                <span
-                  className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                    isDarkMode
-                      ? "bg-yellow-900 text-yellow-300"
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  Investigating
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-1">
+                      <MapPin
+                        className={`w-4 h-4 ${
+                          isDarkMode ? "text-slate-400" : "text-slate-500"
+                        }`}
+                      />
+                      <span
+                        className={`${
+                          isDarkMode ? "text-slate-400" : "text-slate-600"
+                        }`}
+                      >
+                        {(() => {
+                          const pos = parseLocation(report.location);
+                          const key = pos ? `${pos.lat},${pos.lng}` : null;
+                          return key
+                            ? addresses[key] || "Loading address..."
+                            : "No location";
+                        })()}
+                      </span>
+                    </div>
+                  </div>
                   <div className="flex items-center space-x-1">
-                    <MapPin
+                    <Clock
                       className={`w-4 h-4 ${
                         isDarkMode ? "text-slate-400" : "text-slate-500"
                       }`}
@@ -325,95 +287,12 @@ function AccountProfileVisit() {
                         isDarkMode ? "text-slate-400" : "text-slate-600"
                       }`}
                     >
-                      Lincoln Elementary School
+                      {formatTime(report.time)}
                     </span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-1">
-                  <Clock
-                    className={`w-4 h-4 ${
-                      isDarkMode ? "text-slate-400" : "text-slate-500"
-                    }`}
-                  />
-                  <span
-                    className={`${
-                      isDarkMode ? "text-slate-400" : "text-slate-600"
-                    }`}
-                  >
-                    5 days ago
-                  </span>
-                </div>
               </div>
-            </div>
-
-            {/* Report 3 */}
-            <div
-              className={`border rounded-xl p-4 ${
-                isDarkMode
-                  ? "border-slate-700 bg-slate-700/30"
-                  : "border-slate-200 bg-slate-50"
-              }`}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex-1">
-                  <h3
-                    className={`font-semibold ${
-                      isDarkMode ? "text-white" : "text-slate-800"
-                    }`}
-                  >
-                    Traffic Light Malfunction
-                  </h3>
-                  <p
-                    className={`text-sm mt-1 ${
-                      isDarkMode ? "text-slate-300" : "text-slate-600"
-                    }`}
-                  >
-                    Traffic lights stuck on red at busy intersection
-                  </p>
-                </div>
-                <span
-                  className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                    isDarkMode
-                      ? "bg-green-900 text-green-300"
-                      : "bg-green-100 text-green-800"
-                  }`}
-                >
-                  Resolved
-                </span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-1">
-                    <MapPin
-                      className={`w-4 h-4 ${
-                        isDarkMode ? "text-slate-400" : "text-slate-500"
-                      }`}
-                    />
-                    <span
-                      className={`${
-                        isDarkMode ? "text-slate-400" : "text-slate-600"
-                      }`}
-                    >
-                      Main St & Oak Avenue
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock
-                    className={`w-4 h-4 ${
-                      isDarkMode ? "text-slate-400" : "text-slate-500"
-                    }`}
-                  />
-                  <span
-                    className={`${
-                      isDarkMode ? "text-slate-400" : "text-slate-600"
-                    }`}
-                  >
-                    1 week ago
-                  </span>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* View More Button */}
